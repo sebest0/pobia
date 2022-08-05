@@ -443,7 +443,7 @@ GameObject:
   - component: {fileID: 1003465202}
   - component: {fileID: 1003465201}
   m_Layer: 0
-  m_Name: pelota de futvbol
+  m_Name: pele de futvbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
