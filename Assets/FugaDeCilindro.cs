@@ -16,5 +16,9 @@ public class FugaDeCilindro : MonoBehaviour
     void Update()
     {
         transform.position += transform.right * Mathf.Sin(Time.time + i) * 0.01f;
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            transform.position = new Vector3(0,0,0);
+        }
     }
 }

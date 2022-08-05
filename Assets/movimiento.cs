@@ -13,6 +13,6 @@ public class movimiento : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"),0);
+        transform.position += new Vector3(Input.GetAxisRaw("Horizontal")/10,Input.GetAxisRaw("Vertical")/10,0);
     }
 }

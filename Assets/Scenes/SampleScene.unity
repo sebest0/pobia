@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 918484915}
   - component: {fileID: 918484914}
   - component: {fileID: 918484913}
+  - component: {fileID: 918484917}
   m_Layer: 0
   m_Name: Diego maradona
   m_TagString: Untagged
@@ -346,6 +347,19 @@ Transform:
   m_Father: {fileID: 1182696536}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &918484917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918484912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b9d710368e915946ab53fe56fe8c949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
