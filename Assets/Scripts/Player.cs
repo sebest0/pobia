@@ -34,8 +34,8 @@ public class Player : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivity;
+            float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivity * 10f;
+            float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivity * 10f ;
 
             //El movimiento vertical del mouse hace girar en torno al eje X
             xRotation -= mouseY;
