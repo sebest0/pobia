@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1289166543319720424}
   - component: {fileID: 1289166543319720425}
   - component: {fileID: 1289166543319720426}
+  - component: {fileID: 203430701380553051}
   m_Layer: 0
   m_Name: Herbert
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289166543319720428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -66,9 +67,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  speed: 8
-  sensitivity: 1000
+  speed: 4
+  jumpSpeed: 5
+  gravity: 10
+  sensitivity: 0.4
   cam: {fileID: 0}
+  controller: {fileID: 203430701380553051}
 --- !u!114 &1289166543319720426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +107,24 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!143 &203430701380553051
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289166543319720428}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 40
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1943346705456032910
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +136,6 @@ GameObject:
   - component: {fileID: 1943346705456032898}
   - component: {fileID: 1943346705456032899}
   - component: {fileID: 1943346705456032908}
-  - component: {fileID: 1943346705456032909}
   m_Layer: 0
   m_Name: Cuerpo
   m_TagString: Untagged
@@ -187,17 +208,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1943346705456032909
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1943346705456032910}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
