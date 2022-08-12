@@ -28,6 +28,7 @@ public class Player : NetworkBehaviour
             //Pongo la camara encima del jugador y le digo que herbert es el papa
             cam.transform.SetPositionAndRotation(transform.localPosition + Vector3.up * 0.8f, transform.localRotation);
             cam.transform.SetParent(transform);
+            
         }
     }
     private void Update()
@@ -61,6 +62,7 @@ public class Player : NetworkBehaviour
             }
             moveDirection.y -= gravity * Time.deltaTime;
             controller.Move(moveDirection * Time.deltaTime);
+            
         }
     }
 }
