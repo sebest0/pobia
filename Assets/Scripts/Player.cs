@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
+    [SerializeField]
+    Transform itemContainer;
+
+    IItem item;
     public float speed = 8f;
     public float jumpSpeed = 6f;
     public float gravity = 10f;
@@ -18,7 +22,7 @@ public class Player : NetworkBehaviour
 
     private void Start()
     {
-        if(isLocalPlayer)
+        if (isLocalPlayer)
         {
             //Cuando aparece el jugador le saco el mouse dea
             Cursor.lockState = CursorLockMode.Locked;
@@ -28,12 +32,38 @@ public class Player : NetworkBehaviour
             //Pongo la camara encima del jugador y le digo que herbert es el papa
             cam.transform.SetPositionAndRotation(transform.localPosition + Vector3.up * 0.8f, transform.localRotation);
             cam.transform.SetParent(transform);
-            
+
         }
     }
     private void Update()
     {
         Movimiento();
+        if (isLocalPlayer)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                RaycastHit hit;
+
+                Vector3 p1 = itemContainer.position;
+
+                // Cast a sphere wrapping character controller 10 meters forward
+                // to see if it is about to hit anything.
+                if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
+                {
+                    Debug.Log(hit.transform.gameObject);
+                    if (hit.transform.GetComponentInParent<IItem>() != null)
+                    {
+                        hit.transform.GetComponentInParent<IItem>().PickUp(itemContainer);
+                    }
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                item = gameObject.GetComponentInChildren<IItem>();
+                item.Use();
+            }
+        }
+
     }
 
     void Movimiento()
@@ -41,7 +71,7 @@ public class Player : NetworkBehaviour
         if (isLocalPlayer)
         {
             float mouseX = Input.GetAxis("Mouse X") * sensitivity * 10f;
-            float mouseY = Input.GetAxis("Mouse Y") * sensitivity * 10f ;
+            float mouseY = Input.GetAxis("Mouse Y") * sensitivity * 10f;
 
             //El movimiento vertical del mouse hace girar en torno al eje X
             xRotation -= mouseY;
@@ -62,7 +92,7 @@ public class Player : NetworkBehaviour
             }
             moveDirection.y -= gravity * Time.deltaTime;
             controller.Move(moveDirection * Time.deltaTime);
-            
+
         }
     }
 }

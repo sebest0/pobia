@@ -5,16 +5,7 @@ using UnityEngine;
 public interface IItem
 {
     // Start is called before the first frame update
-    public void Pickup()
-    {
-
-    }
-    public void Use()
-    {
-
-    }
-    public void Drop()
-    {
-
-    }
+    void PickUp(Transform itemContainer);
+    void Use();
+    void Drop();
 }
