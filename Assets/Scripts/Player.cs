@@ -28,13 +28,13 @@ public class Player : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             //Creo un GameObject vacio (local del metodo Start)
-            //GameObject camara = new GameObject("Camara" + gameObject.name);
+            GameObject camara = new GameObject("Camara" + gameObject.name);
             //Le agrego una camara
-            //camara.AddComponent<Camera>();
+            camara.AddComponent<Camera>();
             //Lo instancio y utilizo el viejo GameObject para referenciar la camara
-            //camara = Instantiate(camara, Vector3.zero, Quaternion.Euler(Vector3.zero));
+            camara = Instantiate(camara, Vector3.zero, Quaternion.Euler(Vector3.zero));
             //En cam guardo el componente "camara"
-            //cam = camara.GetComponent<Camera>();
+            cam = camara.GetComponent<Camera>();
             //Pongo la camara encima del jugador y le digo que herbert es el papa
             cam.transform.SetPositionAndRotation(transform.localPosition + Vector3.up * 0.8f, transform.localRotation);
             cam.transform.SetParent(transform);
