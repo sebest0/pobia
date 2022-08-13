@@ -27,8 +27,14 @@ public class Player : NetworkBehaviour
             //Cuando aparece el jugador le saco el mouse dea
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            //busco la camara cuando prenda el juego
-            cam = Camera.FindObjectOfType<Camera>();
+            //Creo un GameObject vacio (local del metodo Start)
+            //GameObject camara = new GameObject("Camara" + gameObject.name);
+            //Le agrego una camara
+            //camara.AddComponent<Camera>();
+            //Lo instancio y utilizo el viejo GameObject para referenciar la camara
+            //camara = Instantiate(camara, Vector3.zero, Quaternion.Euler(Vector3.zero));
+            //En cam guardo el componente "camara"
+            //cam = camara.GetComponent<Camera>();
             //Pongo la camara encima del jugador y le digo que herbert es el papa
             cam.transform.SetPositionAndRotation(transform.localPosition + Vector3.up * 0.8f, transform.localRotation);
             cam.transform.SetParent(transform);
@@ -60,7 +66,10 @@ public class Player : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 item = gameObject.GetComponentInChildren<IItem>();
-                item.Use();
+                if (item != null )
+                {
+                    item.Use();
+                }
             }
         }
 

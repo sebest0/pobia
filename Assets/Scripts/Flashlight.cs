@@ -9,7 +9,7 @@ public class Flashlight : MonoBehaviour, IItem
     // Start is called before the first frame update
     void Start()
     {
-        //lus = gameObject.GetComponentInChildren<Light>();
+        lus = gameObject.GetComponentInChildren<Light>();
         TurnOff();
     }
 
@@ -30,7 +30,10 @@ public class Flashlight : MonoBehaviour, IItem
     }
 
     public void PickUp(Transform a) {
-        
+        transform.SetParent(a);
+        //Lo de quaternion es algo turbio q usa unity, pero es rotarlo 90 grados en el eje Y
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.up * 90f);
     }
 
     public void Drop() { }
