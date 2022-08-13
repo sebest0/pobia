@@ -7,6 +7,7 @@ public class Player : NetworkBehaviour
 {
     [SerializeField]
     Transform itemContainer;
+    
 
     IItem item;
     public float speed = 8f;
@@ -27,18 +28,8 @@ public class Player : NetworkBehaviour
             //Cuando aparece el jugador le saco el mouse dea
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            //Creo un GameObject vacio (local del metodo Start)
-            GameObject camara = new GameObject("Camara" + gameObject.name);
-            //Le agrego una camara
-            camara.AddComponent<Camera>();
-            //Lo instancio y utilizo el viejo GameObject para referenciar la camara
-            camara = Instantiate(camara, Vector3.zero, Quaternion.Euler(Vector3.zero));
-            //En cam guardo el componente "camara"
-            cam = camara.GetComponent<Camera>();
-            //Pongo la camara encima del jugador y le digo que herbert es el papa
-            cam.transform.SetPositionAndRotation(transform.localPosition + Vector3.up * 0.8f, transform.localRotation);
-            cam.transform.SetParent(transform);
-
+            //Activo la camara
+            cam.gameObject.SetActive(true);
         }
     }
     private void Update()
@@ -50,9 +41,7 @@ public class Player : NetworkBehaviour
             {
                 RaycastHit hit;
 
-                Vector3 p1 = itemContainer.position;
-
-                // Cast a sphere wrapping character controller 10 meters forward
+                // Cast a Ray
                 // to see if it is about to hit anything.
                 if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
                 {
@@ -63,13 +52,30 @@ public class Player : NetworkBehaviour
                     }
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 item = gameObject.GetComponentInChildren<IItem>();
                 if (item != null )
                 {
                     item.Use();
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                RaycastHit hit;
+
+                if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
+                {
+                    Debug.Log(hit.transform.gameObject);
+                    if(hit.transform.GetComponent<IHold>() != null)
+                    {
+                        hit.transform.GetComponent<IHold>().Hold(1, 1, gameObject.GetComponent<NetworkIdentity>());
+                    }
+                }
+            }
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
+                
             }
         }
 

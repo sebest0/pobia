@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public interface IItem
 {
@@ -8,4 +9,9 @@ public interface IItem
     void PickUp(Transform itemContainer);
     void Use();
     void Drop();
+}
+
+public interface IHold
+{
+    void Hold(float x, float z, NetworkIdentity player);
 }
