@@ -12,8 +12,9 @@ public class Flashlight : NetworkBehaviour, IItem
     {
         lus = gameObject.GetComponentInChildren<Light>();
     }
-    public void PickUp(Transform a) {
-        transform.SetParent(a);
+    [Command]
+    public void PickUp(Transform itemContainer) {
+        transform.SetParent(itemContainer);
         //Lo de quaternion es algo turbio q usa unity, pero es rotarlo 90 grados en el eje Y
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.up * 90f);

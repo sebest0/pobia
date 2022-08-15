@@ -10,6 +10,7 @@ public class Player : NetworkBehaviour
     
 
     IItem item;
+    IHold hold;
     public float speed = 8f;
     public float jumpSpeed = 6f;
     public float gravity = 10f;
@@ -20,6 +21,8 @@ public class Player : NetworkBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
     float xRotation = 0;
+
+    private bool canMove = true;
 
     private void Start()
     {
@@ -35,6 +38,7 @@ public class Player : NetworkBehaviour
     private void Update()
     {
         Movimiento();
+        CheckHold();
         if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.E))
@@ -48,6 +52,7 @@ public class Player : NetworkBehaviour
                     Debug.Log(hit.transform.gameObject);
                     if (hit.transform.GetComponentInParent<IItem>() != null)
                     {
+                        CmdPickupItem(hit.transform.GetComponentInParent<NetworkIdentity>());
                         hit.transform.GetComponentInParent<IItem>().PickUp(itemContainer);
                     }
                 }
@@ -60,23 +65,7 @@ public class Player : NetworkBehaviour
                     item.Use();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                RaycastHit hit;
-
-                if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
-                {
-                    Debug.Log(hit.transform.gameObject);
-                    if(hit.transform.GetComponent<IHold>() != null)
-                    {
-                        hit.transform.GetComponent<IHold>().Hold(1, 1, gameObject.GetComponent<NetworkIdentity>());
-                    }
-                }
-            }
-            if (Input.GetKeyUp(KeyCode.Mouse0))
-            {
-                
-            }
+            
         }
 
     }
@@ -87,7 +76,7 @@ public class Player : NetworkBehaviour
         {
             float mouseX = Input.GetAxis("Mouse X") * sensitivity * 10f;
             float mouseY = Input.GetAxis("Mouse Y") * sensitivity * 10f;
-
+            if (!canMove) { mouseX = 0; mouseY = 0; }
             //El movimiento vertical del mouse hace girar en torno al eje X
             xRotation -= mouseY;
             //Para que no puedas girar
@@ -96,10 +85,10 @@ public class Player : NetworkBehaviour
 
             //Roto hacia la izquierda o derecha (sobre el eje Y)
             transform.Rotate(Vector3.up * mouseX);
-
             if (controller.isGrounded)
             {
                 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                if (!canMove) { moveDirection = Vector3.zero; }
                 moveDirection = transform.TransformDirection(moveDirection);
                 moveDirection *= speed;
                 if (Input.GetButton("Jump"))
@@ -107,8 +96,50 @@ public class Player : NetworkBehaviour
             }
             moveDirection.y -= gravity * Time.deltaTime;
             controller.Move(moveDirection * Time.deltaTime);
+            
 
         }
+    }
+
+    void CheckHold()
+    {
+        if (isLocalPlayer)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                RaycastHit hit;
+
+                if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
+                {
+                    Debug.Log(hit.transform.gameObject);
+                    if (hit.transform.GetComponent<IHold>() != null)
+                    {
+                        canMove = false;
+                        hold = hit.transform.GetComponent<IHold>();
+                        CmdPickupItem(hit.transform.GetComponent<NetworkIdentity>());
+                    }
+                }
+            }
+
+            if (Input.GetKey(KeyCode.Mouse0) && !canMove)
+            {
+                hold.Hold(transform.forward*Input.GetAxis("Mouse Y") + transform.right*Input.GetAxis("Mouse X"));
+            }
+
+            if (Input.GetKeyUp(KeyCode.Mouse0) && !canMove)
+            {
+                hold.Release();
+                hold = null;
+                canMove = true;
+            }
+        }
+    }
+
+    [Command]
+    void CmdPickupItem(NetworkIdentity item)
+    {
+        item.AssignClientAuthority(connectionToClient);
+        Debug.Log(item.assetId);
     }
 }
 

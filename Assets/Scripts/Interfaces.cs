@@ -13,5 +13,6 @@ public interface IItem
 
 public interface IHold
 {
-    void Hold(float x, float z, NetworkIdentity player);
+    void Hold(Vector3 vector);
+    void Release();
 }

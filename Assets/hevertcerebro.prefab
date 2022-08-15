@@ -172,9 +172,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   itemContainer: {fileID: 2845115259983849306}
-  networkIdentity: {fileID: 2218494529649667637}
-  speed: 5.6
-  jumpSpeed: 6
+  speed: 3
+  jumpSpeed: 1
   gravity: 10
   sensitivity: 0.4
   cam: {fileID: 1474602591}

@@ -5,13 +5,15 @@ using Mirror;
 
 public class Door : NetworkBehaviour, IHold
 {
-    private void Start()
-    {
-        
-    }
     [Command]
-    public void Hold(float x, float z, NetworkIdentity player)
+    public void Hold(Vector3 vector)
     {
-        GetComponent<Rigidbody>().AddForce(x, 0, z);
+        GetComponent<Rigidbody>().AddForce(vector);
+    }
+
+    [Command]
+    public void Release()
+    {
+        netIdentity.RemoveClientAuthority();
     }
 }
