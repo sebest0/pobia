@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1474602592}
   - component: {fileID: 1474602591}
   - component: {fileID: 1474602590}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 2218494529649667637}
   - component: {fileID: 8652311634648015940}
   - component: {fileID: 8653933272795731782}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: hevertcerebro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,9 +171,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  itemContainer: {fileID: 2845115259983849306}
+  mano: {fileID: 2845115259983849306}
   speed: 3
-  jumpSpeed: 1
+  jumpSpeed: 4
   gravity: 10
   sensitivity: 0.4
   cam: {fileID: 1474602591}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 2568895329711890212}
   - component: {fileID: 262310044335953527}
   - component: {fileID: 1141492413838238599}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: hevert
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2845115259983849306}
-  m_Layer: 0
+  - component: {fileID: 4224855970047224160}
+  m_Layer: 3
   m_Name: ItemContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,3 +342,20 @@ Transform:
   m_Father: {fileID: 1474602592}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4224855970047224160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2845115259983849309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 718765cfd7355e843b6701008ddf8fb4
+  hasSpawned: 0

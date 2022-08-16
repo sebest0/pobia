@@ -6,11 +6,16 @@ using UnityEngine;
 public class Player : NetworkBehaviour
 {
     [SerializeField]
-    Transform itemContainer;
-    
+    //Para que el server lo vea y temas de autoridad
+    [SyncVar]
+    Transform mano;
+    //Antes eran del tipo de la interfaz, hasta que tengamos inventario esto es para poder referenciarlo hasta tirarlo
+    [SyncVar]
+    GameObject item;
+    //La puerta o cajon
+    [SyncVar]
+    GameObject hold;
 
-    IItem item;
-    IHold hold;
     public float speed = 8f;
     public float jumpSpeed = 6f;
     public float gravity = 10f;
@@ -22,6 +27,7 @@ public class Player : NetworkBehaviour
     private Vector3 moveDirection = Vector3.zero;
     float xRotation = 0;
 
+    //Mientras abra puertas no se va a poder mover, por ahora lo dejamos moverse dior
     private bool canMove = true;
 
     private void Start()
@@ -37,42 +43,60 @@ public class Player : NetworkBehaviour
     }
     private void Update()
     {
-        Movimiento();
-        CheckHold();
         if (isLocalPlayer)
         {
+            Movimiento();
+            //La funcion de abrir puerta o cajon (Es como las otras pero la hice funcion)
+            CheckHold();
             if (Input.GetKeyDown(KeyCode.E))
             {
+                if (item != null)
+                {
+                    Debug.Log("Ya tenes un item");
+                    return;
+                }
                 RaycastHit hit;
 
                 // Cast a Ray
                 // to see if it is about to hit anything.
                 if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
                 {
-                    Debug.Log(hit.transform.gameObject);
-                    if (hit.transform.GetComponentInParent<IItem>() != null)
+                    if (hit.transform.GetComponent<IItem>() != null)
                     {
-                        CmdPickupItem(hit.transform.GetComponentInParent<NetworkIdentity>());
-                        hit.transform.GetComponentInParent<IItem>().PickUp(itemContainer);
+                        item = hit.transform.gameObject;
+                        CmdPickUp(item);
+                        item.GetComponent<IItem>().PickUp(mano);
+                        Debug.Log("Item agarrado");
                     }
                 }
             }
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                if (item == null)
+                {
+                    Debug.Log("No tenes items");
+                    return;
+                }
+                CmdDrop(item);
+                item.GetComponent<IItem>().Drop();
+                item = null;
+                Debug.Log("Item suelto");
+            }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                item = gameObject.GetComponentInChildren<IItem>();
                 if (item != null )
                 {
-                    item.Use();
+                    Debug.Log("Usado");
+                    item.GetComponent<IItem>().Use();
                 }
             }
             
         }
 
     }
-
+    [Client]
     void Movimiento()
     {
-        if (isLocalPlayer)
         {
             float mouseX = Input.GetAxis("Mouse X") * sensitivity * 10f;
             float mouseY = Input.GetAxis("Mouse Y") * sensitivity * 10f;
@@ -101,9 +125,11 @@ public class Player : NetworkBehaviour
         }
     }
 
+    /*Es la funcion de las puertas, tiene 3 etapas, cuando haces click, asignas todo.
+      Mientras mantenes, moves el mouse y mueve la puerta
+      Y cuando soltas, le sacas autoridad y seguis con tu vida*/
     void CheckHold()
     {
-        if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -111,35 +137,45 @@ public class Player : NetworkBehaviour
 
                 if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
                 {
-                    Debug.Log(hit.transform.gameObject);
                     if (hit.transform.GetComponent<IHold>() != null)
                     {
+                        //Como estoy agarrando un agarrable, no me puedo mover y le asigno autoridad
+                        hold = hit.transform.gameObject;
+                        CmdPickUp(hold);
                         canMove = false;
-                        hold = hit.transform.GetComponent<IHold>();
-                        CmdPickupItem(hit.transform.GetComponent<NetworkIdentity>());
+                        Debug.Log("Agarrado");
                     }
                 }
             }
 
             if (Input.GetKey(KeyCode.Mouse0) && !canMove)
             {
-                hold.Hold(transform.forward*Input.GetAxis("Mouse Y") + transform.right*Input.GetAxis("Mouse X"));
+                //La funcion hold es la que mueve la puerta
+                hold.GetComponent<IHold>().Hold(transform.forward*Input.GetAxis("Mouse Y") + transform.right*Input.GetAxis("Mouse X"));
             }
 
             if (Input.GetKeyUp(KeyCode.Mouse0) && !canMove)
             {
-                hold.Release();
+                CmdDrop(hold);
                 hold = null;
                 canMove = true;
+                Debug.Log("Soltado");
             }
         }
     }
 
+    //Funcion que asigna autoridad
     [Command]
-    void CmdPickupItem(NetworkIdentity item)
+    void CmdPickUp(GameObject pick)
     {
-        item.AssignClientAuthority(connectionToClient);
-        Debug.Log(item.assetId);
+        pick.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
+    }
+
+    //Funcion que saca autoridad
+    [Command]
+    void CmdDrop(GameObject pick)
+    {
+        pick.GetComponent<NetworkIdentity>().RemoveClientAuthority();
     }
 }
 

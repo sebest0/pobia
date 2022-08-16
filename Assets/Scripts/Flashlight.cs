@@ -7,20 +7,40 @@ public class Flashlight : NetworkBehaviour, IItem
 {
     [SerializeField]
     Light lus;
-    // Start is called before the first frame update
+
+    //Desde player le podemos asignar el "parent" para poder agarrarlo al jugador
+    [SyncVar]
+    Transform itemContainer;
+
     void Start()
     {
         lus = gameObject.GetComponentInChildren<Light>();
     }
-    [Command]
-    public void PickUp(Transform itemContainer) {
-        transform.SetParent(itemContainer);
-        //Lo de quaternion es algo turbio q usa unity, pero es rotarlo 90 grados en el eje Y
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.Euler(Vector3.up * 90f);
+
+    void Update()
+    {
+        //si tiene padre
+        if (itemContainer != null)
+        {
+            //Saque lo del quaternion porque es un falso padre, osea le copia la posicion y la rotacion, pero es un gameobject independiente
+            transform.SetPositionAndRotation(itemContainer.position, itemContainer.rotation * Quaternion.Euler(0, 90, 0));
+            gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        }
     }
 
-    public void Drop() { }
+    public void PickUp(Transform Parent)
+    {
+        itemContainer = Parent;
+        Debug.Log("Padre puesto");
+    }
+    public void Drop()
+    {
+        itemContainer = null;
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        //Lo tira para lante
+        gameObject.GetComponent<Rigidbody>().AddForce(Vector3.forward * 2);
+        Debug.Log("Padre ido");
+    }
     public void Use() {
         lus.enabled = !lus.isActiveAndEnabled;
     }
