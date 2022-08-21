@@ -7,13 +7,10 @@ public class Player : NetworkBehaviour
 {
     [SerializeField]
     //Para que el server lo vea y temas de autoridad
-    [SyncVar]
     Transform mano;
     //Antes eran del tipo de la interfaz, hasta que tengamos inventario esto es para poder referenciarlo hasta tirarlo
-    [SyncVar]
     GameObject item;
     //La puerta o cajon
-    [SyncVar]
     GameObject hold;
 
     public float speed = 8f;
@@ -77,8 +74,8 @@ public class Player : NetworkBehaviour
                     Debug.Log("No tenes items");
                     return;
                 }
-                CmdDrop(item);
                 item.GetComponent<IItem>().Drop();
+                CmdDrop(item);
                 item = null;
                 Debug.Log("Item suelto");
             }
@@ -156,9 +153,9 @@ public class Player : NetworkBehaviour
 
             if (Input.GetKeyUp(KeyCode.Mouse0) && !canMove)
             {
+                canMove = true;
                 CmdDrop(hold);
                 hold = null;
-                canMove = true;
                 Debug.Log("Soltado");
             }
         }
